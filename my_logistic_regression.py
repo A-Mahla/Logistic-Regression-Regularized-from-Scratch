@@ -19,7 +19,7 @@ class MyLogisticRegression():
         alpha: float | int = 1e-3,
         max_iter: float | int = 1e3,
         save_loss: bool = False,
-        penality: str = 'l2',
+        penality: str | None = 'l2',
         lambda_: int | float = 1.0,
         feature_scaling: Callable = lambda x: x
     ):
@@ -30,7 +30,7 @@ class MyLogisticRegression():
             and isinstance(lambda_, (float, int))
             and isinstance(max_iter, (float, int))
             and isinstance(save_loss, bool)
-            and isinstance(penality, str)
+            and (isinstance(penality, str) or not penality)
             and callable(feature_scaling)
         ):
             raise TypeError(error)

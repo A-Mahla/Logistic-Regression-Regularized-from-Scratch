@@ -7,7 +7,6 @@ from utils import model_load
 import matplotlib.pyplot as plt
 
 
-
 if __name__ == "__main__":
 
     df_features = pd.read_csv("solar_system_census.csv")
@@ -31,15 +30,6 @@ if __name__ == "__main__":
     plot_f1_score(models)
 
     best_model = get_best_model(models)
-    models = polynomial_train(
-        classes,
-        X,
-        Y,
-        power=best_model['power'],
-        feature_scaling=best_model['feature_scaling'],
-        proportion=0.7,
-        save_model=False
-    )
 
     Y_hat = plot_logistic_model(
         best_model,

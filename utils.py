@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 import os
 import dill
 import collections.abc as collections
@@ -24,8 +25,13 @@ def model_load(poly, directory='./models'):
             directory,
             f"model_{poly}.pkl"
         )
-    with open(path, 'rb') as f:
-        data = dill.load(f)
+    try:
+        with open(path, 'rb') as f:
+            data = dill.load(f)
+    except FileNotFoundError:
+        print('Please, run \'benchmark_train.py\' before \'best_model.py\' '
+              'to save trained models.')
+        sys.exit()
     return data
 
 
