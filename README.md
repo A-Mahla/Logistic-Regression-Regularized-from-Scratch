@@ -1,1 +1,1 @@
-# A-Mahla-Logistic-Regression-Regularized-from-Scratch
+# Logistic-Regression-Regularized-from-Scratch
