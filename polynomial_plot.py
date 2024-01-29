@@ -38,10 +38,11 @@ def colors_and_labels(nb_class, class_labels):
 
 
 def plot_3D_classifier(
-    x1, x2, x3, y, feature_labels, class_labels, show=None, title=None
+    x1, x2, x3, y, feature_labels, class_labels, show=None,
+    title=None, num=None
 ):
 
-    fig = plt.figure(figsize=fig_size)
+    fig = plt.figure(figsize=fig_size, num=num)
     ax = fig.add_subplot(projection='3d')
     class_labels = get_iterable(class_labels)
     cmap = colors_and_labels(np.unique(y).size, class_labels)
@@ -93,7 +94,16 @@ def plot_logistic_model(
         x1 = x[:, x1_idx]
         for x2_idx in range(x1_idx + 1, x.shape[1]):
             x2 = x[:, x2_idx]
-            fig = plt.figure(figsize=fig_size)
+            fig = plt.figure(
+                    figsize=fig_size,
+                    num=(
+                        'model_' + str(model['power'])
+                        + '_lambda_' + str(model['lambda_']) + ' - '
+                        + feature_labels[x2_idx]
+                        + ' vs '
+                        + feature_labels[x1_idx]
+                    )
+                )
             ax = fig.add_subplot()
             scatter = ax.scatter(
                 x1,

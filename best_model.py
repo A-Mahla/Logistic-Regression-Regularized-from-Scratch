@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from polynomial_plot import plot_f1_score, plot_logistic_model, plot_3D_classifier
-from benchmark_train import get_best_model
+from benchmark_train import get_best_model, display_best_model
 from polynomial_train import polynomial_train
 from utils import model_load
 import matplotlib.pyplot as plt
@@ -30,6 +30,7 @@ if __name__ == "__main__":
     plot_f1_score(models)
 
     best_model = get_best_model(models)
+    display_best_model(best_model)
 
     Y_hat = plot_logistic_model(
         best_model,
@@ -47,7 +48,11 @@ if __name__ == "__main__":
         Y_hat,
         ["weight", "height", "bone_density"],
         classes.keys(),
-        title='Predict Classes'
+        title='Predict Classes',
+        num=(
+            'model_' + str(best_model['power'])
+            + '_lambda_' + str(best_model['lambda_'])
+        )
     )
     plot_3D_classifier(
         X[:, 0],
@@ -56,6 +61,7 @@ if __name__ == "__main__":
         Y,
         ["weight", "height", "bone_density"],
         classes.keys(),
-        title='True Classes'
+        title='True Classes',
+        num='original targets'
     )
     plt.show()
