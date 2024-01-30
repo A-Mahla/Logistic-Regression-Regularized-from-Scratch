@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 from typing import Callable
 from matplotlib_config import fig_size, line_width

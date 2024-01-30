@@ -1,5 +1,7 @@
 from my_logistic_regression import MyLogisticRegression as MyLR
-from utils import data_spliter, model_save, add_polynomial_features, k_fold_cross_validation
+from data_spliter import data_spliter, k_fold_cross_validation
+from save_models import model_save
+from polynomial_features import add_polynomial_features
 from metrics import f1_score_, f1_score_weighted_, accuracy_score_
 from normalization import Minmax
 import numpy as np
@@ -17,7 +19,7 @@ def logistic_model_train(
     alpha=1e-2,
     max_iter=1e5,
     lambda_=0
-):
+) -> tuple[MyLR, np.ndarray, float]:
 
     def get_classed_y(y, class_value):
         y_copy = y.copy()
@@ -53,7 +55,7 @@ def logistic_classifier_train(
     alpha: float | int = 1e-1,
     max_iter: float | int = 1e5,
     lambda_: float | int = 0,
-) -> list | None:
+) -> tuple[list[np.ndarray], float, float] | None:
 
     if not isinstance(classes, dict):
         return None
@@ -93,7 +95,8 @@ def one_poly_train(
     max_iter: float | int = 1e5,
     power: int = 1,
     lambda_: float | int = 0,
-):
+) -> tuple[list[np.ndarray], float, float]:
+
     lrs = []
     f1_scores = []
     accuracies = []
@@ -133,10 +136,10 @@ def polynomial_train(
     Y: np.ndarray,
     power: int = 1,
     unique_power: bool = True,
-    feature_scaling: Callable = Minmax.lambda_apply,
+    feature_scaling: Callable = Minmax.transform,
     proportion: float = None,
     save_model: bool = True
-):
+) -> list[dict]:
 
     if power > 6 or power < 1:
         return None

@@ -19,10 +19,7 @@ def precision_score_(y, y_hat, pos_label=1):
         and isinstance(y_hat, np.ndarray)
         and y.shape == y_hat.shape
         and len(y_hat) != 0
-        and (
-            isinstance(pos_label, int)
-            or isinstance(pos_label, str)
-        )
+        and isinstance(pos_label, (int, str))
         and pos_label in y_hat
     ):
         None
@@ -39,10 +36,7 @@ def recall_score_(y, y_hat, pos_label=1):
         and isinstance(y_hat, np.ndarray)
         and y.shape == y_hat.shape
         and len(y_hat) != 0
-        and (
-            isinstance(pos_label, int)
-            or isinstance(pos_label, str)
-        )
+        and isinstance(pos_label, (int, str))
         and pos_label in y_hat
     ):
         None

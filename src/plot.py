@@ -1,14 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
-from utils import get_iterable
 from my_logistic_regression import MyLogisticRegression as MyLR
-from utils import add_polynomial_features
+from polynomial_features import add_polynomial_features
 from matplotlib_config import fig_size
+import collections.abc as collections
 
 
-def plot_f1_score(models):
+def get_iterable(x: any) -> any:
+    if not isinstance(x, collections.Iterable) or isinstance(x, str):
+        return [x]
+    return x
 
+
+def plot_f1_score(models: dict) -> None:
     plt.subplots(figsize=fig_size, num='Polynomial F1_score Evaluation')
     for i, (model) in enumerate(models):
         plt.bar(
@@ -20,7 +25,7 @@ def plot_f1_score(models):
     plt.show()
 
 
-def colors_and_labels(nb_class, class_labels):
+def colors_and_labels(nb_class: int, class_labels: list[str]):
     cmap = 'viridis'
     if nb_class == 2:
         if len(class_labels) == 1:
@@ -34,13 +39,21 @@ def colors_and_labels(nb_class, class_labels):
                 'my_cmap',
                 plt.rcParams['axes.prop_cycle'].by_key()['color'][:nb_class]
             )
+        print(type(cmap))
     return cmap
 
 
 def plot_3D_classifier(
-    x1, x2, x3, y, feature_labels, class_labels, show=None,
-    title=None, num=None
-):
+        x1: np.ndarray,
+        x2: np.ndarray,
+        x3: np.ndarray,
+        y: np.ndarray,
+        feature_labels: list[str] | str,
+        class_labels: list[str] | str,
+        show: bool = False,
+        title: str | None = None,
+        num: str | None = None
+) -> None:
 
     fig = plt.figure(figsize=fig_size, num=num)
     ax = fig.add_subplot(projection='3d')
@@ -63,7 +76,7 @@ def plot_3D_classifier(
     ax.set_ylabel('\n' + feature_labels[1], linespacing=3.2)
     ax.set_zlabel('\n' + feature_labels[2], linespacing=3.2)
     ax.set_title(title)
-    if show is not None:
+    if show:
         plt.show()
 
 

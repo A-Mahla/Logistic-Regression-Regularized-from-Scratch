@@ -1,3 +1,5 @@
+
+
 class Minmax():
     def __init__(self):
         self.min = 0.
@@ -18,7 +20,7 @@ class Minmax():
         return (X * (self.max - self.min + e)) + self.min
 
     @staticmethod
-    def lambda_apply(X):
+    def transform(X):
         e = 1e-20
         mn = X.min(axis=0)
         mx = X.max(axis=0)
@@ -44,6 +46,6 @@ class Zscore():
         return (X * (self.std + e)) + self.mean
 
     @staticmethod
-    def lambda_apply(X):
+    def transform(X):
         e = 1e-20
         return (X - X.mean) / (X.std + e)

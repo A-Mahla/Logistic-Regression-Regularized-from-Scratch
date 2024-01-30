@@ -1,16 +1,21 @@
 import pandas as pd
 import numpy as np
-from polynomial_plot import plot_f1_score, plot_logistic_model, plot_3D_classifier
-from benchmark_train import get_best_model, display_best_model
-from polynomial_train import polynomial_train
-from utils import model_load
+import sys
+import os
+path = os.path.join(os.path.dirname(__file__), 'src')
+sys.path.insert(1, path)
+from plot import plot_f1_score, plot_logistic_model, plot_3D_classifier
+from best_model import get_best_model, display_best_model
+from save_models import model_load
 import matplotlib.pyplot as plt
 
 
 if __name__ == "__main__":
 
-    df_features = pd.read_csv("solar_system_census.csv")
-    df_target = pd.read_csv("solar_system_census_planets.csv")
+    datapath = 'datasets/'
+
+    df_features = pd.read_csv(datapath + "solar_system_census.csv")
+    df_target = pd.read_csv(datapath + "solar_system_census_planets.csv")
     X = np.array(df_features[["height", "weight", "bone_density"]])
     Y = np.array(df_target[["Origin"]], dtype=int)
 
