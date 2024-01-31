@@ -1,7 +1,11 @@
 import numpy as np
 
 
-def data_spliter(x, y, proportion):
+def data_spliter(
+    x: np.ndarray,
+    y: np.ndarray,
+    proportion: float
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
 
     def reshape(x):
         return x.reshape((-1, 1)) if x.ndim == 1 else x
@@ -20,7 +24,11 @@ def data_spliter(x, y, proportion):
     return reshape(x_train), reshape(x_test), reshape(y_train), reshape(y_test)
 
 
-def k_fold_cross_validation(x, y, k=5):
+def k_fold_cross_validation(
+    x: np.ndarray,
+    y: np.ndarray,
+    k: int = 5
+) -> tuple[list[np.ndarray], list[np.ndarray], list[np.ndarray], list[np.ndarray]]:
 
     def reshape(x):
         return x.reshape((-1, 1)) if x.ndim == 1 else x

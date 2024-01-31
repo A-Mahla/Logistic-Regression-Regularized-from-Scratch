@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def accuracy_score_(y, y_hat):
+def accuracy_score_(y: np.ndarray, y_hat: np.ndarray) -> float:
     if not (
         isinstance(y, np.ndarray)
         and isinstance(y_hat, np.ndarray)
@@ -13,7 +13,12 @@ def accuracy_score_(y, y_hat):
     return true / y_hat.size
 
 
-def precision_score_(y, y_hat, pos_label=1):
+def precision_score_(
+    y: np.ndarray,
+    y_hat: np.ndarray,
+    pos_label: int | str = 1
+) -> float:
+
     if not (
         isinstance(y, np.ndarray)
         and isinstance(y_hat, np.ndarray)
@@ -30,7 +35,12 @@ def precision_score_(y, y_hat, pos_label=1):
     return tp / (tp + fp)
 
 
-def recall_score_(y, y_hat, pos_label=1):
+def recall_score_(
+    y: np.ndarray,
+    y_hat: np.ndarray,
+    pos_label: int | str = 1
+) -> float:
+
     if not (
         isinstance(y, np.ndarray)
         and isinstance(y_hat, np.ndarray)
@@ -47,7 +57,12 @@ def recall_score_(y, y_hat, pos_label=1):
     return tp / (tp + fn)
 
 
-def f1_score_(y, y_hat, pos_label=1):
+def f1_score_(
+    y: np.ndarray,
+    y_hat: np.ndarray,
+    pos_label: int | str = 1
+) -> float:
+
     precision = precision_score_(y, y_hat, pos_label=pos_label)
     recall = recall_score_(y, y_hat, pos_label=pos_label)
     if precision + recall == 0:
@@ -55,7 +70,12 @@ def f1_score_(y, y_hat, pos_label=1):
     return (2 * precision * recall) / (precision + recall)
 
 
-def f1_score_weighted_(y, y_hat, labels):
+def f1_score_weighted_(
+    y: np.ndarray,
+    y_hat: np.ndarray,
+    labels: list[str | int]
+) -> float:
+
     if len(y) == 0:
         return None
     f1_scores = 0.

@@ -1,6 +1,6 @@
 
 
-def get_best_model(models):
+def get_best_model(models: list[dict]) -> dict:
     best_model = models[0]
     for model in models:
         if model['f1_score'] > best_model['f1_score']:
@@ -8,7 +8,7 @@ def get_best_model(models):
     return best_model
 
 
-def display_best_model(model):
+def display_best_model(model: dict) -> None:
     print(
         '\033[93m'
         '\n\t==========================================================\n\n'

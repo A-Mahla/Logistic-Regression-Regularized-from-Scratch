@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def add_polynomial_features(x, power):
+def add_polynomial_features(x: np.ndarray, power: int) -> np.ndarray:
     X = x
     if len(X) < 2:
         return X

@@ -205,9 +205,7 @@ class MyLogisticRegression():
             self.theta = self.theta - self.alpha * self.gradient_(X, Y)
         return self.theta
 
-    def plot_convergence(
-        self,
-    ):
+    def plot_convergence(self):
         if len(self.iterate_cost['loss']) == 0:
             print("No loss to plot...")
             return None
