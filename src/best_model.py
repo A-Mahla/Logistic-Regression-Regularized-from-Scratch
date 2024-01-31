@@ -1,6 +1,8 @@
+from utils import type_checking
 
 
-def get_best_model(models: list[dict]) -> dict:
+@type_checking
+def get_best_model(models: list) -> dict:
     best_model = models[0]
     for model in models:
         if model['f1_score'] > best_model['f1_score']:
@@ -8,6 +10,7 @@ def get_best_model(models: list[dict]) -> dict:
     return best_model
 
 
+@type_checking
 def display_best_model(model: dict) -> None:
     print(
         '\033[93m'

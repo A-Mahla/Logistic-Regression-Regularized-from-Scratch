@@ -6,19 +6,21 @@ from metrics import f1_score_, f1_score_weighted_, accuracy_score_
 from normalization import Minmax
 import numpy as np
 from typing import Callable
+from utils import type_checking
 
 
+@type_checking
 def logistic_model_train(
     x_train: np.ndarray,
     y_train: np.ndarray,
     x_test: np.ndarray,
     y_test: np.ndarray,
-    theta: np.ndarray,
+    theta: np.ndarray | list,
     class_label: str,
     class_value: int | str,
-    alpha=1e-2,
-    max_iter=1e5,
-    lambda_=0
+    alpha: float | int = 1e-1,
+    max_iter: float | int = 1e5,
+    lambda_: float | int = 0,
 ) -> tuple[MyLR, np.ndarray, float]:
 
     def get_classed_y(y, class_value):
@@ -45,13 +47,14 @@ def logistic_model_train(
     return mylr, y_hat, f1
 
 
+@type_checking
 def logistic_classifier_train(
     classes: dict,
     x_train: np.ndarray,
     y_train: np.ndarray,
     x_test: np.ndarray,
     y_test: np.ndarray,
-    theta: np.ndarray,
+    theta: np.ndarray | list,
     alpha: float | int = 1e-1,
     max_iter: float | int = 1e5,
     lambda_: float | int = 0,
@@ -79,18 +82,19 @@ def logistic_classifier_train(
         y_hats = np.c_[y_hats, lr_y_hat]
     y_hats = MyLR.predict_highest_proba_(y_hats)
     if len(classes) > 1:
-        f1_score_weighted = f1_score_weighted_(y_test, y_hats, classes.values())
+        f1_score_weighted = f1_score_weighted_(y_test, y_hats)
     accuracy = accuracy_score_(y_test, y_hats)
     return lrs, f1_score_weighted, accuracy
 
 
+@type_checking
 def one_poly_train(
     classes: dict,
-    x_train: np.ndarray,
-    y_train: np.ndarray,
-    x_test: np.ndarray,
-    y_test: np.ndarray,
-    theta: np.ndarray,
+    x_train: list,
+    y_train: list,
+    x_test: list,
+    y_test: list,
+    theta: np.ndarray | list,
     alpha: float | int = 1e-2,
     max_iter: float | int = 1e5,
     power: int = 1,
@@ -130,6 +134,7 @@ def one_poly_train(
     return lrs[np.argmax(f1_scores)], mean_f1, mean_accuracy
 
 
+@type_checking
 def polynomial_train(
     classes: dict,
     X: np.ndarray,

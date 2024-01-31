@@ -1,9 +1,11 @@
 import sys
 import os
 import dill
+from utils import type_checking
 
 
-def model_save(data: any, name: str | int, directory: str = 'models') -> None:
+@type_checking
+def model_save(data: dict, name: str | int, directory: str = 'models') -> None:
     try:
         os.mkdir(
             os.path.join(
@@ -24,6 +26,7 @@ def model_save(data: any, name: str | int, directory: str = 'models') -> None:
         dill.dump(data, f)
 
 
+@type_checking
 def model_load(name: str | int, directory: str = 'models') -> any:
     path = os.path.join(
             os.path.dirname(__file__),

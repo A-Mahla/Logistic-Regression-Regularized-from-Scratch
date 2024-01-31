@@ -1,11 +1,11 @@
 import numpy as np
+from utils import type_checking
 
 
+@type_checking
 def accuracy_score_(y: np.ndarray, y_hat: np.ndarray) -> float:
     if not (
-        isinstance(y, np.ndarray)
-        and isinstance(y_hat, np.ndarray)
-        and y.shape == y_hat.shape
+        y.shape == y_hat.shape
         and len(y_hat) != 0
     ):
         None
@@ -13,18 +13,16 @@ def accuracy_score_(y: np.ndarray, y_hat: np.ndarray) -> float:
     return true / y_hat.size
 
 
+@type_checking
 def precision_score_(
     y: np.ndarray,
     y_hat: np.ndarray,
-    pos_label: int | str = 1
+    pos_label: np.number | int | str = 1
 ) -> float:
 
     if not (
-        isinstance(y, np.ndarray)
-        and isinstance(y_hat, np.ndarray)
-        and y.shape == y_hat.shape
+        y.shape == y_hat.shape
         and len(y_hat) != 0
-        and isinstance(pos_label, (int, str))
         and pos_label in y_hat
     ):
         None
@@ -35,10 +33,11 @@ def precision_score_(
     return tp / (tp + fp)
 
 
+@type_checking
 def recall_score_(
     y: np.ndarray,
     y_hat: np.ndarray,
-    pos_label: int | str = 1
+    pos_label: np.number | int | str = 1
 ) -> float:
 
     if not (
@@ -57,10 +56,11 @@ def recall_score_(
     return tp / (tp + fn)
 
 
+@type_checking
 def f1_score_(
     y: np.ndarray,
     y_hat: np.ndarray,
-    pos_label: int | str = 1
+    pos_label: np.number | int | str = 1
 ) -> float:
 
     precision = precision_score_(y, y_hat, pos_label=pos_label)
@@ -70,15 +70,16 @@ def f1_score_(
     return (2 * precision * recall) / (precision + recall)
 
 
+@type_checking
 def f1_score_weighted_(
     y: np.ndarray,
     y_hat: np.ndarray,
-    labels: list[str | int]
 ) -> float:
 
     if len(y) == 0:
         return None
     f1_scores = 0.
+    labels = np.unique(y)
     for value in labels:
         f1_scores += f1_score_(y, y_hat, pos_label=value) \
                         * np.sum(y == value)

@@ -1,6 +1,8 @@
 import numpy as np
+from utils import type_checking
 
 
+@type_checking
 def data_spliter(
     x: np.ndarray,
     y: np.ndarray,
@@ -24,6 +26,7 @@ def data_spliter(
     return reshape(x_train), reshape(x_test), reshape(y_train), reshape(y_test)
 
 
+@type_checking
 def k_fold_cross_validation(
     x: np.ndarray,
     y: np.ndarray,
