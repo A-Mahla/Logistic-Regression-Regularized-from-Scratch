@@ -58,3 +58,21 @@ def k_fold_cross_validation(
              reshape(np.concatenate([y_shuffled[:start], y_shuffled[end:]]))
         )
     return x_train, x_test, y_train, y_test
+
+
+@type_checking
+def mini_batches(X: np.ndarray, Y: np.ndarray, batch_size: int):
+
+    m = X.shape[0]
+    indices = np.arange(m)
+    np.random.shuffle(indices)
+
+    batches = []
+    for start_idx in range(0, m, batch_size):
+        end_idx = min(start_idx + batch_size, m)
+        batch_idx = indices[start_idx:end_idx]
+        X_batch = X[batch_idx]
+        y_batch = Y[batch_idx]
+        batches.append((X_batch, y_batch))
+
+    return batches

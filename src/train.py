@@ -128,9 +128,9 @@ def one_poly_train(
     print(f'\t    Multi-Class Logistic Model '
           f'(lambda = {lambda_:3}):'
           ' accuracy:'
-          f' \033[38;5;109m{mean_accuracy * 100:5.5}%\033[0m,'
+          f' \033[38;5;109m{mean_accuracy * 100:6.3f}%\033[0m,'
           ' weighted f1 score:'
-          f' \033[38;5;109m{mean_f1 * 100:5.5}%\033[0m')
+          f' \033[38;5;109m{mean_f1 * 100:6.3f}%\033[0m')
     return lrs[np.argmax(f1_scores)], mean_f1, mean_accuracy
 
 
@@ -143,17 +143,18 @@ def polynomial_train(
     unique_power: bool = True,
     feature_scaling: Callable = Minmax.transform,
     proportion: float = None,
-    save_model: bool = True
+    save_model: bool = True,
+    lambdas_: list | None = None
 ) -> list[dict]:
 
     if power > 6 or power < 1:
         return None
     range_power = power if not unique_power else 1
-    lambdas_ = [0., 0.2, 0.4, 0.6, 0.8, 1.]
+    lambdas_ = [0., 0.2, 0.4, 0.6, 0.8, 1.] if lambdas_ is None else lambdas_
     thetas = [[0.]] * (X.shape[1] + 1)
     config = {
-        'max_iter': [1e5, 1e5, 1e5, 1e5, 1e6, 1e6],
-        'alpha': [1, 1, 1, 1e-2, 1e-8, 1e-9],
+        'max_iter': [1e4, 1e4, 1e4, 1e4, 1e4, 1e4],
+        'alpha': [1, 1, 1, 1, 1, 1],
         'thetas': [
             thetas,
             thetas + [[0.]] * X.shape[1] * 1,

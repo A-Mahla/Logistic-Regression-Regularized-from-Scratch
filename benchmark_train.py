@@ -12,8 +12,8 @@ from best_model import get_best_model, display_best_model
 
 if __name__ == "__main__":
 
+    # Upload datasets
     datapath = 'datasets/'
-
     df_features = pd.read_csv(datapath + "solar_system_census.csv")
     df_target = pd.read_csv(datapath + "solar_system_census_planets.csv")
     X = np.array(df_features[["height", "weight", "bone_density"]])
@@ -26,6 +26,8 @@ if __name__ == "__main__":
         "The Asteroids Belt colonies": 3
     }
 
+    # train models with different polynome and lambda_ values
+    # see 'src/train.py'
     models = polynomial_train(
             classes,
             X,
@@ -35,6 +37,7 @@ if __name__ == "__main__":
             feature_scaling=Minmax.transform
         )
 
+    # Choose the best model
     best_model = get_best_model(models)
     display_best_model(best_model)
     plot_f1_score(models)

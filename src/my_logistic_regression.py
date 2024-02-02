@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from typing import Callable
 from matplotlib_config import fig_size, line_width
 from utils import type_checking
+from data_spliter import mini_batches
 
 
 class MyLogisticRegression():
@@ -11,7 +12,9 @@ class MyLogisticRegression():
     Description:
     My personnal logistic regression to classify things.
     """
+
     supported_penalities = ['l2']
+    supported_gradient = ['batch', 'mini_batch', 'stochastic']
 
     @type_checking
     def __init__(
@@ -21,13 +24,13 @@ class MyLogisticRegression():
         max_iter: float | int = 1e3,
         save_loss: bool = False,
         penality: str | None = 'l2',
-        lambda_: int | float = 1.0,
+        lambda_: int | float = 0.0,
         feature_scaling: Callable = lambda x: x
     ):
 
         self.alpha = alpha
         self.max_iter = int(max_iter)
-        self.theta = np.array(theta)
+        self.theta = np.array(theta, dtype=float)
         if self.theta.ndim == 1:
             self.theta = self.theta.reshape((-1, 1))
         elif self.theta.ndim > 2:
@@ -61,7 +64,10 @@ class MyLogisticRegression():
         return 1 / (1 + np.exp(-x))
 
     @type_checking
-    def _update_iterate_cost(self, current_loss: float) -> None:
+    def _update_iterate_cost(
+        self,
+        current_loss: float
+    ) -> None:
         # save loss() over iteration to plot_convergence.
         if len(self.iterate_cost['iter']) == 0:
             self.iterate_cost['iter'].append(1)
@@ -156,44 +162,70 @@ class MyLogisticRegression():
         else:
             return np.argmax(y, axis=1).reshape((-1, 1))
 
-    def gradient_(self, x: np.ndarray, y: np.ndarray) -> np.ndarray:
+    def gradient_(
+        self,
+        X: np.ndarray,
+        Y: np.ndarray
+    ) -> np.ndarray:
+
         error = ("MyLogisticRegression.gradient_() arg 1 and arg 2 must be"
-                 "a 2 dimentionals np.ndarray of compatible shapes")
+                 "a 2 dimentionals non-empty np.ndarray of compatible shapes")
         if not (
-            x.ndim == 2 and y.ndim == 2 and y.shape[1] == 1
-            and x.shape[0] == y.shape[0] and x.shape[1] == self.theta.shape[0]
+            X.ndim == 2 and Y.ndim == 2 and Y.shape[1] == 1 and len(X) != 0
+            and X.shape[0] == Y.shape[0] and X.shape[1] == self.theta.shape[0]
         ):
             raise TypeError(error)
-        y_hat = self._sigmoid(x @ self.theta)
+        Y_hat = self._sigmoid(X @ self.theta)
         if self.save_loss:
-            self._update_iterate_cost(self.loss_(y, y_hat))
+            self._update_iterate_cost(self.loss_(Y, Y_hat))
         if self.penality == 'l2':
             theta_ = self.theta.copy()
             theta_.flat[0] = 0
             theta_ *= self.lambda_
-            return (x.T @ (y_hat - y) + self.lambda_ * theta_) / y.size
-        return (x.T @ (y_hat - y)) / y.size
+            return (X.T @ (Y_hat - Y) + self.lambda_ * theta_) / Y.size
+        return (X.T @ (Y_hat - Y)) / Y.size
 
     @type_checking
-    def fit_(self, x: np.ndarray, y: np.ndarray) -> np.ndarray:
+    def fit_(
+        self,
+        x: np.ndarray,
+        y: np.ndarray,
+        gradient_type: str = 'batch'
+    ) -> np.ndarray:
+
         error = ("MyLogisticRegression.fit_() arg 1 and arg 2 must be"
                  "a 1 or 2 dimentionals np.ndarray")
         if not (x.ndim <= 2 and y.ndim <= 2):
             raise TypeError(error)
         X = self._add_intercept(self.feature_scaling(x))
         Y = y.reshape((-1, 1)) if y.ndim == 1 else y
+        i = 0
+        datas = [(X, Y)]
+        if gradient_type == 'mini_batch':
+            datas = mini_batches(X, Y, 32)
+        elif gradient_type == 'stochastic':
+            datas = mini_batches(X, Y, 1)
         for _ in range(self.max_iter):
-            self.theta = self.theta - self.alpha * self.gradient_(X, Y)
+            for (sub_x, sub_y) in datas:
+                if i >= self.max_iter:
+                    break
+                gradient = self.gradient_(sub_x, sub_y)
+                self.theta = self.theta - self.alpha * gradient
+                i += 1
+            if i >= self.max_iter:
+                break
         return self.theta
 
-    def plot_convergence(self):
+    def plot_convergence(self, num='Loss vs iterations'):
         if len(self.iterate_cost['loss']) == 0:
             print("No loss to plot...")
             return None
         print("loss min value : ", min(self.iterate_cost['loss']))
-        fig, ax = plt.subplots(figsize=fig_size)
+        fig, ax = plt.subplots(figsize=fig_size, num=num)
         plt.xlim((0, self.iterate_cost['iter'][-1]))
-        plt.ylim((0, max(self.iterate_cost['loss'])))
+        plt.ylim(
+            (min(self.iterate_cost['loss']), max(self.iterate_cost['loss']))
+        )
         ax.plot(
             self.iterate_cost['iter'],
             self.iterate_cost['loss'],
