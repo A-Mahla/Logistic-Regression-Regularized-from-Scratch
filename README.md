@@ -14,10 +14,12 @@ This project provides a comprehensive implementation of Regularized Logistic Reg
 ## Getting Started
 
 ### Prerequisites
-Ensure you have the following installed:
+Ensure you have the following installed (see requirements.txt):
 - Python 3.x
 - numpy
 - pandas
+- matplolib
+- dill
 
 ### Installation
 Clone the repository to your local machine:
