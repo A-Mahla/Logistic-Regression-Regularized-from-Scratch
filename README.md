@@ -36,7 +36,7 @@ The project includes two main scripts for demonstration and testing purposes:
    python benchmark_train.py
    ```
 
-2. **[selected_model.py](https://github.com/A-Mahla/Logistic-Regression-Regularized-from-Scratch/blob/main/selected_model.py)**: Use this script to load the best trained model and visualize its performance with a plot of the decision boundary or other relevant metrics.
+2. **[selected_model.py](https://github.com/A-Mahla/Logistic-Regression-Regularized-from-Scratch/blob/main/selected_model.py)**: Use this script to load the best trained model and visualize its performance with a plot.
 
    ```
    python selected_model.py
